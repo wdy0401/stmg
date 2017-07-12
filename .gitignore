@@ -91,3 +91,5 @@ ENV/
 .ropeproject
 raw/
 raw - 副本/
+*.7z
+*.png
