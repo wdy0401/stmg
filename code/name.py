@@ -5,7 +5,7 @@
 创建时间：2017/07/19
 目的： 将文件按照中文备份保存
 """
-#生成中文文件
+# 生成中文文件
 import os
 import shutil
 p={"commodity_position":"商品持仓金额",
@@ -30,3 +30,7 @@ p={"commodity_position":"商品持仓金额",
 for name in p.keys():
     shutil.copy("../data/"+name+".csv","../data/"+p[name]+".csv")
 shutil.copy("./"+"margin.csv","../data/"+"客户权益金.csv")
+
+if __name__=="__main__":
+    import name
+    print(help(name))
