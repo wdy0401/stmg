@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Jul 17 09:09:03 2017
-
-@author: Lori
+公司：中融汇信
+作者：王德扬
+创建时间：2017/07/19
+目的： 生成6个统计范围的数据总表
+从wind提取证券结算资金数据，金融机构：各项存款余额，非存款金融机构存贷款
+ 绘制持仓量，成交量，客户权益金图，并保存
 """
-#从wind提取证券结算资金数据，金融机构：各项存款余额，非存款金融机构存贷款
-# 绘制持仓量，成交量，客户权益金图
 from WindPy import *
 import pandas as pd
 import re
 import time
-import numpy
 import matplotlib.pyplot as plt
 w.start();
 today = time.strftime('%Y-%m-%d',time.localtime(time.time()))
@@ -24,6 +24,7 @@ positionall.index=[pd.datetime(*[int(y) for y in re.search('(\d+)-(\d+)-(\d+)',s
 a=w.edb("M5207489", "2012-01-01", today,"Fill=Previous")
 settlement=pd.DataFrame(a.Data,index=a.Fields,columns=a.Times).T
 settlement=settlement*100000000
+settlement.columns=['settlement']
 settlement.to_csv("../data/settlement.csv")
 settlement.index=[pd.datetime(*[int(y) for y in re.search('(\d+)-(\d+)-(\d+)',str(x)).groups()]) for x in settlement.index]
 
@@ -31,6 +32,7 @@ settlement.index=[pd.datetime(*[int(y) for y in re.search('(\d+)-(\d+)-(\d+)',st
 c=w.edb("M0009940", "2012-01-01", today,"Fill=Previous")
 deposit=pd.DataFrame(c.Data,index=c.Fields,columns=c.Times).T
 deposit=deposit*100000000
+deposit.columns=['deposit']
 deposit.to_csv("../data/deposit.csv")
 deposit.index=[pd.datetime(*[int(y) for y in re.search('(\d+)-(\d+)-(\d+)',str(x)).groups()]) for x in deposit.index]
 
@@ -38,20 +40,21 @@ deposit.index=[pd.datetime(*[int(y) for y in re.search('(\d+)-(\d+)-(\d+)',str(x
 d=w.edb("M0252011", "2012-01-01", today,"Fill=Previous")
 nobank=pd.DataFrame(d.Data,index=d.Fields,columns=d.Times).T
 nobank=nobank*100000000
+nobank.columns=['nobank']
 nobank.to_csv("../data/nobank.csv")
 nobank.index=[pd.datetime(*[int(y) for y in re.search('(\d+)-(\d+)-(\d+)',str(x)).groups()]) for x in nobank.index]
 
 #客户权益金
-premium=pd.read_csv('../data/premium.csv',names=['premium'])*100000000
-premium.index=[pd.Timestamp(str(x)) for x in premium.index]
-premium.to_csv("../data/premium_w.csv")
+p=pd.read_csv('./margin.csv',names=['margin'])*100000000
+p.index=[pd.Timestamp(x) for x in p.index]
 
-alist=pd.concat([tradeall,positionall,settlement,premium,nobank,deposit],axis=1)
+#绘图
+alist=pd.concat([tradeall,positionall,settlement,p,nobank,deposit],axis=1)
 alist=alist.ffill()
 alist.plot()
 plt.savefig('../fig/sum.png', dpi=100)
 
-alist=pd.concat([tradeall,positionall,settlement,premium],axis=1)
+alist=pd.concat([tradeall,positionall,settlement,p],axis=1)
 alist=alist.ffill()
 alist.plot()
 plt.savefig('../fig/part.png', dpi=100)

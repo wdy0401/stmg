@@ -2,7 +2,7 @@
 """
 公司：中融汇信
 作者：王德扬
-创建时间：2017/07/07
+创建时间：2017/07/19
 目的：生成每日的期货交易量数据
 """
 
@@ -31,7 +31,7 @@ def getctrs():#生成所有的wind合约名
             yield line.strip()
 def download(ctr,sym):#下载所有的合约相关数据
 #   today=datetime.today()
-#   a=w.wsd(ctr, "close,volume,amt,oi,settle", "2008-01-01", f"{today.year}-{today.month}-{today.day}", "")
+#   a=w.wsd(ctr, "close,volume,amt,oi,settle", "2008-01-01", f"{today.year}-{today.month}-{today.day}", "")#收盘 成交 总量 持仓 结算
 #   df=pd.DataFrame(a.Data,index=a.Fields,columns=a.Times).T#转换成pd格式
 #   df.to_csv(f"../raw/{ctr}.csv")#存储到本地
     df=pd.DataFrame.from_csv(f"../raw/{ctr}.csv")#测试时使用
@@ -193,18 +193,18 @@ def merge_all3():#综合所有的持仓额数据
     for sym in persym.keys():
         comm=comm+persym[sym]
         
-    comm.to_csv("../data/position_premium.csv")
+    comm.to_csv("../data/position_margin.csv")
     comm=comm-equity-fix
     comm.to_csv("../data/commodity_pre.csv")
 
-init()
-download_all()
-load_mtpr()
-merge_all()
-to_disk()
-merge_all2()
-to_disk2()
-merge_all3()
+init()#初始化文件夹
+download_all()#从wind下载合约收盘 成交 总量 持仓 结算数据
+load_mtpr()#提取合约乘数保证金比率
+merge_all()#按品种合并成交额，持仓额，合约乘数变更阶段按照线性变化进行调整
+to_disk()#保存数据
+merge_all2()#分大类计算持仓额
+to_disk2()#保存大类持仓额数据
+merge_all3()#分大类计算持仓保证金
 
 """
 wind成交额的计算方式

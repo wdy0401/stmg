@@ -21,3 +21,8 @@
 待完成部分
   期权数据
 
+
+download_w
+getdate
+compare
+name
