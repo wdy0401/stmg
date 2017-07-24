@@ -1,4 +1,4 @@
-python download_w_20170720.py
-python post_w_20170720.py
-python compare_w_20170720.py
-python name_w_20170720.py
+python download.py
+python post.py
+python compare.py
+python name.py

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
+'''
 公司：中融汇信
 作者：王德扬
 创建时间：2017/07/24
@@ -10,13 +10,13 @@
     sq 双边
     ds 双边
     zs 双边
-"""
+'''
 
 import os
 import re
 import pandas as pd
 from datetime import datetime
-#from WindPy import *
+from WindPy import *
 
 global persym;persym=dict()
 global ctrs_data;ctrs_data=dict() #存储本次下载的所有信息
@@ -31,7 +31,7 @@ def init():
     '''
     @note:初始化函数,生成对应文件夹
     '''
-#    w.start()
+    w.start()
     if not os.path.exists('../raw'):
         os.mkdir('../raw')
     if not os.path.exists('../fig'):
@@ -43,7 +43,7 @@ def getctrs():
     '''
     @note:生成所有的wind合约名
     '''
-    with open("ctrlist.txt") as f:
+    with open("./ctrlist.txt") as f:
         for line in f.readlines():
             yield line.strip()
 
@@ -53,11 +53,11 @@ def download(ctr,sym):
     @ctr:合约名
     @sym:品种名
     '''
-#   today=datetime.today()
-#   a=w.wsd(ctr, "close,volume,amt,oi,settle", "2008-01-01", f"{today.year}-{today.month}-{today.day}", "")#收盘 成交 总量 持仓 结算
-#   df=pd.DataFrame(a.Data,index=a.Fields,columns=a.Times).T # 转换成pd格式
-#   df.to_csv(f"../raw/{ctr}.csv") #存储到本地
-    df=pd.DataFrame.from_csv(f"../raw/{ctr}.csv") #测试时使用
+    today=datetime.today()
+    a=w.wsd(ctr, "close,volume,amt,oi,settle", "2008-01-01", f"{today.year}-{today.month}-{today.day}", "")#收盘 成交 总量 持仓 结算
+    df=pd.DataFrame(a.Data,index=a.Fields,columns=a.Times).T # 转换成pd格式
+    df.to_csv(f"../raw/{ctr}.csv") #存储到本地
+    #df=pd.DataFrame.from_csv(f"../raw/{ctr}.csv") #测试时使用
     if sym not in ctrs_data:
         ctrs_data[sym]=dict()    
     ctrs_data[sym][ctr]=df.copy() #存储到ctrs_data
@@ -282,16 +282,15 @@ def merge_all3():
     comm=comm-equity-fix
     comm.to_csv("../data/commodity_pre.csv")
 
-init() 
-download_all()
-load_mtpr()
-merge_all()
-to_disk()
-merge_all2()
-to_disk2()
-merge_all3()
-
 if __name__=="__main__":
-    import download
-    print(help(download))
+    init() 
+    download_all()
+    load_mtpr()
+    merge_all()
+    to_disk()
+    merge_all2()
+    to_disk2()
+    merge_all3()
+#    import download
+#    print(help(download))
     

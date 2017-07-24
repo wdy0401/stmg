@@ -48,7 +48,7 @@ deposit=pd.read_csv('../data/deposit.csv',index_col=0) # 测试使用
 nobank=pd.read_csv('../data/nobank.csv',index_col=0) # 测试使用
 
 # 客户权益金
-p=pd.read_csv('./margin.csv',names=['margin'])*100000000
+p=pd.read_csv('../data/margin.csv',names=['margin'])*100000000
 p.index=[pd.Timestamp(x) for x in p.index]
 
 # 绘图
@@ -62,6 +62,6 @@ alist=alist.ffill()
 alist.plot()
 plt.savefig('../fig/part.png', dpi=100)
 
-if __name__=="__main__":
-    import post
-    print(help(post))
+#if __name__=="__main__":
+#    import post
+#    print(help(post))
