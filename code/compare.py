@@ -15,7 +15,7 @@ a=pd.read_csv('../data/position_margin.csv',names=['position_margin'])
 a.index=[pd.Timestamp(x) for x in a.index]
 a=a.resample('M').mean()
 a.index=[datetime(x.year,x.month,1) for x in a.index]
-p=pd.read_csv('../data/margin.csv',names=['margin'])
+p=pd.read_csv('./margin.csv',names=['margin'])
 p.index=[pd.Timestamp(x) for x in p.index]
 p.index=[datetime(x.year,x.month,1) for x in p.index]
 b=pd.read_csv('../data/commodity_pre.csv',names=['commodity_pre'])
@@ -33,6 +33,6 @@ d.index=[datetime(x.year,x.month,1) for x in d.index]
 e=pd.concat([a,b,c,d,p*100000000],axis=1)['2013':p.index[-1]]
 e.to_csv('../data/margin_m.csv')
 
-#if __name__=="__main__":
-#    import compare
-#    print(help(compare))
+if __name__=="__main__":
+    import compare
+    print(help(compare))
