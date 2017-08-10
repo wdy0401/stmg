@@ -1,0 +1,13 @@
+﻿getdata 时间戳问题
+
+从wind来的数据落地的时候将时间变为日期为单位的  就是没有毫秒的那种
+
+所有数据在落地时候就是以元为单位的 注意修改乘以一个亿之类的
+
+
+
+def loadcsv(filename):
+    re=pd.read_csv(filename,index_col=0)
+    re.predict.index=[pd.Timestamp(x[0:10]) for x in predict.index]
+    return re
+    
